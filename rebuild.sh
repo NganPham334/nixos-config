@@ -68,7 +68,7 @@ BUILD_EXIT=$?
 set -e -o pipefail
 
 if [ "$BUILD_EXIT" -eq 0 ]; then
-    GEN=$(sudo nixos-rebuild list-generations | tail -1 | awk '{print $1}')
+    GEN=$(sudo nixos-rebuild list-generations | grep -w True | awk '{print $1}')
     mv "$TMP_LOG" "$LOG_DIR/rebuild-$GEN.log"
 
     git add -A
