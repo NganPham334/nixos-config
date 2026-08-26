@@ -121,4 +121,10 @@
   systemd.tmpfiles.rules = [
     "d /var/log/nixos-rebuild 0755 ngan users - -"
   ];
+
+  programs.git.config = {
+    user.name = "NganPham334";
+    user.email = "189833900+NganPham334@users.noreply.github.com";
+    init.defaultBranch = "main";
+  };
 }
