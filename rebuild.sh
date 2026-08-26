@@ -63,8 +63,8 @@ echo
 echo -e "${BOLD}=== Building ===${NC}"
 
 set +e +o pipefail
-sudo nixos-rebuild switch -I "nixos-config=$CONFIG_DIR/configuration.nix" 2>&1 | tee "$TMP_LOG"
-BUILD_EXIT=${PIPESTATUS[0]}
+sudo nixos-rebuild switch -I "nixos-config=$CONFIG_DIR/configuration.nix" &> "$TMP_LOG"
+BUILD_EXIT=$?
 set -e -o pipefail
 
 if [ "$BUILD_EXIT" -eq 0 ]; then

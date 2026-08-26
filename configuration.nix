@@ -77,6 +77,7 @@
     opencode
     git
     gh
+    fastfetch
   ];
   programs.hyprland.enable = true;
   # Some programs need SUID wrappers, can be configured further or are
@@ -111,7 +112,7 @@
       users = [ "ngan" ];
       commands = [
         {
-          command = "${pkgs.nixos-rebuild}/bin/nixos-rebuild";
+          command = "/run/current-system/sw/bin/nixos-rebuild";
           options = [ "NOPASSWD" ];
         }
       ];
