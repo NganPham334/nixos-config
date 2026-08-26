@@ -78,6 +78,7 @@
     git
     gh
     fastfetch
+    btop
   ];
   programs.hyprland.enable = true;
   # Some programs need SUID wrappers, can be configured further or are
