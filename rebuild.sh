@@ -63,7 +63,8 @@ echo
 echo -e "${BOLD}=== Building ===${NC}"
 
 set +e +o pipefail
-sudo nixos-rebuild switch -I "nixos-config=$CONFIG_DIR/configuration.nix" &> "$TMP_LOG"
+git add -A
+sudo nixos-rebuild switch --flake "$CONFIG_DIR#nixos" &> "$TMP_LOG"
 BUILD_EXIT=$?
 set -e -o pipefail
 
@@ -71,7 +72,6 @@ if [ "$BUILD_EXIT" -eq 0 ]; then
     GEN=$(sudo nixos-rebuild list-generations | grep -w True | awk '{print $1}')
     mv "$TMP_LOG" "$LOG_DIR/rebuild-$GEN.log"
 
-    git add -A
     git commit -m "generation $GEN"
 
     rotate_logs
