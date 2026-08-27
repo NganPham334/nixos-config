@@ -56,6 +56,21 @@ if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
     exit 0
 fi
 
+echo
+read -r -p "$(echo -e "${BOLD}Commit message (optional)${NC}: ")" COMMIT_MSG
+echo
+read -r -p "$(echo -e "${BOLD}Skip build? Commit only? [y/N]${NC} ")" SKIP_BUILD
+if [[ "$SKIP_BUILD" =~ ^[Yy]$ ]]; then
+    while [[ -z "${COMMIT_MSG:-}" ]]; do
+        echo -e "${YELLOW}A commit message is required when skipping the build.${NC}"
+        read -r -p "$(echo -e "${BOLD}Commit message${NC}: ")" COMMIT_MSG
+    done
+    git add -A
+    git commit -m "$COMMIT_MSG"
+    echo -e "${GREEN}${BOLD}Committed.${NC}"
+    exit 0
+fi
+
 TIMESTAMP=$(date +%s)
 TMP_LOG="$LOG_DIR/rebuild-$TIMESTAMP.tmp.log"
 
@@ -72,7 +87,11 @@ if [ "$BUILD_EXIT" -eq 0 ]; then
     GEN=$(sudo nixos-rebuild list-generations | grep -w True | awk '{print $1}')
     mv "$TMP_LOG" "$LOG_DIR/rebuild-$GEN.log"
 
-    git commit -m "generation $GEN"
+    if [[ -n "${COMMIT_MSG:-}" ]]; then
+        git commit -m "generation $GEN: $COMMIT_MSG"
+    else
+        git commit -m "generation $GEN"
+    fi
 
     rotate_logs
 
