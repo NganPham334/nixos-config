@@ -15,9 +15,8 @@
     btop
   ];
 
-  programs.chromium = {
+  programs.firefox = {
     enable = true;
-    package = pkgs.ungoogled-chromium;
   };
 
   wayland.windowManager.hyprland = {
