@@ -60,26 +60,17 @@
     isNormalUser = true;
     description = "Tuong Ngan";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
   };
+
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
+  home-manager.users."ngan" = import ./home;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-    ghostty
-    ungoogled-chromium
-    nixd
-    opencode
-    git
-    gh
-    fastfetch
-    btop
-  ];
+  environment.systemPackages = with pkgs; [];
+
   programs.hyprland.enable = true;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -123,10 +114,4 @@
   systemd.tmpfiles.rules = [
     "d /var/log/nixos-rebuild 0755 ngan users - -"
   ];
-
-  programs.git.config = {
-    user.name = "NganPham334";
-    user.email = "189833900+NganPham334@users.noreply.github.com";
-    init.defaultBranch = "main";
-  };
 }

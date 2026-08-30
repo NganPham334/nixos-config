@@ -83,6 +83,10 @@ sudo nixos-rebuild switch --flake "$CONFIG_DIR#nixos" &> "$TMP_LOG"
 BUILD_EXIT=$?
 set -e -o pipefail
 
+# The switch may replace packages the current shell has cached (e.g. git
+# moving between system and user profiles), so drop bash's command cache.
+hash -r
+
 if [ "$BUILD_EXIT" -eq 0 ]; then
     GEN=$(sudo nixos-rebuild list-generations | grep -w True | awk '{print $1}')
     mv "$TMP_LOG" "$LOG_DIR/rebuild-$GEN.log"
