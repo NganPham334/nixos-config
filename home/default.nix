@@ -18,12 +18,4 @@
   programs.firefox = {
     enable = true;
   };
-
-  wayland.windowManager.hyprland = {
-    enable = true;
-    package = null;
-    portalPackage = null;
-    configType = "lua";
-    extraLuaFiles."config" = ./hypr/hyprland.lua;
-  };
 }
