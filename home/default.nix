@@ -13,6 +13,7 @@
     gh
     fastfetch
     btop
+    vesktop
   ];
 
   programs.firefox = {

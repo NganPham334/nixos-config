@@ -69,7 +69,20 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = with pkgs; [];
+  environment.systemPackages = with pkgs; [
+    keepassxc
+  ];
+
+  services.udisks2.enable = true;
+  services.devmon.enable = true;
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (action.id.startsWith("org.freedesktop.udisks2.") &&
+          subject.isLocal && subject.active) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
 
   specialisation.xfce.configuration = {
     services.xserver.enable = true;
