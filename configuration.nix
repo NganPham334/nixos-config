@@ -76,8 +76,8 @@
     services.xserver.desktopManager.xfce.enable = true;
     services.greetd = {
       enable = true;
-      settings.default_session_command.command =
-        "${pkgs.tuigreet}/bin/tuigreet --time --cmd xfce4-session";
+      settings.default_session.command =
+        "${pkgs.tuigreet}/bin/tuigreet --time --cmd startxfce4";
     };
   };
 
@@ -85,7 +85,7 @@
     programs.hyprland.enable = true;
     services.greetd = {
       enable = true;
-      settings.default_session_command.command =
+      settings.default_session.command =
         "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
     };
     home-manager.users."ngan" = {
