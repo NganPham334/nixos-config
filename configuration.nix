@@ -74,6 +74,8 @@
   specialisation.xfce.configuration = {
     services.xserver.enable = true;
     services.xserver.desktopManager.xfce.enable = true;
+    services.xserver.exportConfiguration = true;
+    environment.systemPackages = [ pkgs.xinit ];
     services.greetd = {
       enable = true;
       settings.default_session.command =
@@ -86,7 +88,7 @@
     services.greetd = {
       enable = true;
       settings.default_session.command =
-        "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+        "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
     };
     home-manager.users."ngan" = {
       wayland.windowManager.hyprland = {
