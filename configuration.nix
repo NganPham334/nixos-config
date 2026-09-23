@@ -74,17 +74,6 @@
     xinit
   ];
 
-  services.udisks2.enable = true;
-  services.devmon.enable = true;
-  security.polkit.extraConfig = ''
-    polkit.addRule(function(action, subject) {
-      if (action.id.startsWith("org.freedesktop.udisks2.") &&
-          subject.isLocal && subject.active) {
-        return polkit.Result.YES;
-      }
-    });
-  '';
-
   # Desktop environment
   services.xserver.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
