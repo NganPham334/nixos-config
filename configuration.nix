@@ -69,6 +69,9 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Enable Nix experimental features
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   environment.systemPackages = with pkgs; [
     keepassxc
     xinit
