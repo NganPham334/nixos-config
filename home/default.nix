@@ -6,7 +6,6 @@
   home.stateVersion = "26.05";
 
   home.packages = with pkgs; [
-    ghostty
     nixd
     opencode
     git

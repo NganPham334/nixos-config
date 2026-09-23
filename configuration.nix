@@ -71,6 +71,7 @@
 
   environment.systemPackages = with pkgs; [
     keepassxc
+    xinit
   ];
 
   services.udisks2.enable = true;
@@ -84,34 +85,14 @@
     });
   '';
 
-  specialisation.xfce.configuration = {
-    services.xserver.enable = true;
-    services.xserver.desktopManager.xfce.enable = true;
-    services.xserver.exportConfiguration = true;
-    environment.systemPackages = [ pkgs.xinit ];
-    services.greetd = {
-      enable = true;
-      settings.default_session.command =
-        "${pkgs.tuigreet}/bin/tuigreet --time --cmd startxfce4";
-    };
-  };
-
-  specialisation.hyprland.configuration = {
-    programs.hyprland.enable = true;
-    services.greetd = {
-      enable = true;
-      settings.default_session.command =
-        "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
-    };
-    home-manager.users."ngan" = {
-      wayland.windowManager.hyprland = {
-        enable = true;
-        package = null;
-        portalPackage = null;
-        configType = "lua";
-        extraLuaFiles."config" = ./home/hypr/hyprland.lua;
-      };
-    };
+  # Desktop environment
+  services.xserver.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
+  services.xserver.exportConfiguration = true;
+  services.greetd = {
+    enable = true;
+    settings.default_session.command =
+      "${pkgs.tuigreet}/bin/tuigreet --time --cmd startxfce4";
   };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
