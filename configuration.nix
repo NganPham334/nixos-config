@@ -54,6 +54,11 @@
     layout = "us";
     variant = "";
   };
+  i18n.inputMethod = {    
+    enable = true;    
+    type = "fcitx5";    
+    fcitx5.addons = [ pkgs.fcitx5-lotus ];  
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."ngan" = {
@@ -86,6 +91,13 @@
     settings.default_session.command =
       "${pkgs.tuigreet}/bin/tuigreet --time --cmd startxfce4";
   };
+
+  systemd.packages = [ pkgs.fcitx5-lotus ];  
+  systemd.services."fcitx5-lotus-server@ngan" = {    
+    wantedBy = [ "multi-user.target" ];    
+    overrideStrategy = "asDropin";  
+  };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
