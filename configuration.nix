@@ -98,6 +98,14 @@
     overrideStrategy = "asDropin";  
   };
 
+  # hack to get lotus working, TODO: check if they have fixed uinput mode, this hack is needed as of writing
+  users.users.uinput_proxy = {
+      isSystemUser = true;
+      group = "input";
+    };
+
+
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
