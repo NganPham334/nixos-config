@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
@@ -73,13 +73,13 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # Enable Nix experimental features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  nixpkgs.overlays = [ inputs.agenix.overlays.default ];
   environment.systemPackages = with pkgs; [
     keepassxc
     xinit
+    agenix
   ];
 
   # Desktop environment
@@ -99,10 +99,14 @@
   };
 
   # hack to get lotus working, TODO: check if they have fixed uinput mode, this hack is needed as of writing
+  # maybe create an issue idk
   users.users.uinput_proxy = {
       isSystemUser = true;
       group = "input";
-    };
+  };
+
+
+
 
 
 
@@ -117,7 +121,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
