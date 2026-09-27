@@ -75,11 +75,11 @@
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  nixpkgs.overlays = [ inputs.agenix.overlays.default ];
   environment.systemPackages = with pkgs; [
     keepassxc
     xinit
-    agenix
+    sops
+    age
   ];
 
   # Desktop environment
