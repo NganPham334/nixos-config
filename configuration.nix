@@ -65,6 +65,7 @@
     isNormalUser = true;
     description = "Tuong Ngan";
     extraGroups = [ "networkmanager" "wheel" ];
+    hashedPasswordFile = config.sops.secrets.hashed_ngan.path;
   };
 
   home-manager.useGlobalPkgs = true;
@@ -106,7 +107,14 @@
   };
 
 
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
 
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+
+  sops.secrets.hashed_ngan = {
+    neededForUsers = true;
+  };
 
 
 
