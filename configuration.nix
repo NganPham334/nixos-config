@@ -68,6 +68,8 @@
     hashedPasswordFile = config.sops.secrets.hashed_ngan.path;
   };
 
+  users.users.root.hashedPasswordFile = config.sops.secrets.hashed_ngan.path;
+
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.users."ngan" = import ./home;
