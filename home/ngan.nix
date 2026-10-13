@@ -16,6 +16,7 @@
       user.name = "NganPham334";
       user.email = "189833900+NganPham334@users.noreply.github.com";
       init.defaultBranch = "main";
+      url."git@github.com:".insteadOf = "https://github.com/";
     };
   };
 
