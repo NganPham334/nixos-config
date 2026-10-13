@@ -9,6 +9,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+    preservation.url = "github:nix-community/preservation";
   };
 
   outputs = { self, nixpkgs, home-manager, sops-nix,  ... }@inputs: {
@@ -16,9 +19,13 @@
       specialArgs = { inherit inputs; };
       system = "x86_64-linux";
       modules = [
+	./disko.nix
+	./preservation.nix
         ./configuration.nix
         home-manager.nixosModules.home-manager
 	sops-nix.nixosModules.sops
+	inputs.disko.nixosModules.disko
+	inputs.preservation.nixosModules.default
       ];
     };
   };

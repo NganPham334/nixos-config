@@ -15,8 +15,9 @@
   boot.loader.grub.device = "nodev";
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.useOSProber = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.systemd.enable = true;
+  systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -72,17 +73,20 @@
 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-  home-manager.users."ngan" = import ./home;
+  home-manager.sharedModules = [ ./home/common.nix ];
+  home-manager.users."ngan" = import ./home/ngan.nix;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   environment.systemPackages = with pkgs; [
-    keepassxc
     xinit
     sops
     age
+    ncdu
+    ssh-to-age
+    jq
   ];
 
   # Desktop environment
@@ -114,11 +118,16 @@
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
+  environment.shellAliases.sops-host = "SOPS_AGE_KEY=$(sudo cat /etc/ssh/ssh_host_ed25519_key | ssh-to-age -private-key) sops";
+  
+  sops.secrets.ngan_ssh_key = {
+    owner = "ngan";
+    mode = "0400";
+  };
+
   sops.secrets.hashed_ngan = {
     neededForUsers = true;
   };
-
-
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -132,7 +141,17 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+  services.fail2ban = {
+    enable = true;
+    maxretry = 3;
+    bantime = "24h";
+  };
 
+  services.openssh.settings = {
+    LogLevel = "VERBOSE";
+    ClientAliveInterval = 25;
+    ClientAliveCountMax = 3;
+  };
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
