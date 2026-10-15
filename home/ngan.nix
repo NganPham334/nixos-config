@@ -1,6 +1,8 @@
-{ osConfig, pkgs, ... }:
+{ osConfig, pkgs, inputs, ... }:
 
 {
+  imports = [ inputs.nixcord.homeModules.nixcord ];
+
   home.packages = with pkgs; [
     nixd
     keepassxc
@@ -9,6 +11,12 @@
     btop
     gcr_3
   ];
+
+  programs.nixcord = {
+    enable = true;
+    discord.enable = false;
+    vesktop.enable = true;
+  };
 
   programs.git = {
     enable = true;

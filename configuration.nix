@@ -73,6 +73,7 @@
 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
+  home-manager.extraSpecialArgs = { inherit inputs; };
   home-manager.sharedModules = [ ./home/common.nix ];
   home-manager.users."ngan" = import ./home/ngan.nix;
 

@@ -36,10 +36,11 @@
            ".config/mozilla"
            ".mozilla"
            "nixos-config"
+           ".config/vesktop/sessionData"
          ];
       
          files = [
-      
+           ".config/vesktop/state.json"
          ];
        };
     };

@@ -12,6 +12,7 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     preservation.url = "github:nix-community/preservation";
+    nixcord.url = "github:4evy/nixcord";
   };
 
   outputs = { self, nixpkgs, home-manager, sops-nix,  ... }@inputs: {
