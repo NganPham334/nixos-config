@@ -29,10 +29,15 @@
   };
 
   home.sessionVariables = {
-    SSH_ASKPASS = "${pkgs.gcr_3}/libexec/gcr-ssh-askpass";
+    
   };
 
   services.ssh-agent.enable = true;
+  
+  systemd.user.services.ssh-agent.Service.Environment = [
+    "SSH_ASKPASS=${pkgs.gcr_3}/libexec/gcr-ssh-askpass"
+    "SSH_ASKPASS_REQUIRE=force"
+  ];
 
   programs.ssh = {
     enable = true;
