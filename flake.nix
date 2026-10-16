@@ -13,6 +13,7 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
     preservation.url = "github:nix-community/preservation";
     nixcord.url = "github:4evy/nixcord";
+    fcitx5-lotus.url = "github:LotusInputMethod/fcitx5-lotus";
   };
 
   outputs = { self, nixpkgs, home-manager, sops-nix,  ... }@inputs: {
@@ -27,6 +28,7 @@
 	sops-nix.nixosModules.sops
 	inputs.disko.nixosModules.disko
 	inputs.preservation.nixosModules.default
+	inputs.fcitx5-lotus.nixosModules.fcitx5-lotus
       ];
     };
   };

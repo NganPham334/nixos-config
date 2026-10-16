@@ -57,8 +57,7 @@
   };
   i18n.inputMethod = {    
     enable = true;    
-    type = "fcitx5";    
-    fcitx5.addons = [ pkgs.fcitx5-lotus ];  
+    type = "fcitx5";  
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -100,17 +99,9 @@
       "${pkgs.tuigreet}/bin/tuigreet --time --cmd startxfce4";
   };
 
-  systemd.packages = [ pkgs.fcitx5-lotus ];  
-  systemd.services."fcitx5-lotus-server@ngan" = {    
-    wantedBy = [ "multi-user.target" ];    
-    overrideStrategy = "asDropin";  
-  };
-
-  # hack to get lotus working, TODO: check if they have fixed uinput mode, this hack is needed as of writing
-  # maybe create an issue idk
-  users.users.uinput_proxy = {
-      isSystemUser = true;
-      group = "input";
+  services.fcitx5-lotus = {
+    enable = true;
+    users = [ "ngan" ];
   };
 
 
