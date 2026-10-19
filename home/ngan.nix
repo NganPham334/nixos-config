@@ -10,12 +10,38 @@
     fastfetch
     btop
     gcr_3
+    protontricks
   ];
 
   programs.nixcord = {
     enable = true;
     discord.enable = false;
-    vesktop.enable = true;
+
+    vesktop = {
+      enable = true;
+
+      settings = {
+        hardwareVideoAcceleration = true;
+        staticTitle = true;
+        customTitleBar = true;
+        tray = false;
+        minimizeToTray = false;
+      };
+
+      state = {
+        firstLaunch = false;
+
+        windowBounds = {
+          x = 310;
+          y = 214;
+          width = 1325;
+          height = 621;
+        };
+
+        maximized = false;
+        minimized = false;
+      };
+    };
   };
 
   programs.git = {

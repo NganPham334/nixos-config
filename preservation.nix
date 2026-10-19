@@ -37,10 +37,16 @@
            ".mozilla"
            "nixos-config"
            ".config/vesktop/sessionData"
+           "Desktop"
+           "Documents"
+           ".config/fcitx5/conf"
+           ".local/share/Steam"
+           ".steam"
+	   ".local/state/wireplumber"
          ];
       
          files = [
-           ".config/vesktop/state.json"
+
          ];
        };
     };

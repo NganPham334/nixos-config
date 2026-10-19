@@ -55,9 +55,41 @@
     layout = "us";
     variant = "";
   };
+
   i18n.inputMethod = {    
     enable = true;    
-    type = "fcitx5";  
+    type = "fcitx5";
+    fcitx5.settings = {
+      inputMethod = {
+        GroupOrder."0" = "Default";
+        "Groups/0" = {
+          Name = "Default";
+          "Default Layout" = "us";
+          DefaultIM = "lotus";
+        };
+        "Groups/0/Items/0".Name = "keyboard-us";
+        "Groups/0/Items/1".Name = "lotus";
+      };
+
+      globalOptions = {
+        "Hotkey/TriggerKeys" = { };
+	Behavior = {
+          ActiveByDefault = "False";
+          ShareInputState = "All";
+        };
+      };
+    };
+  };
+
+  services.pulseaudio.enable = false;
+
+  security.rtkit.enable = true;
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -87,6 +119,11 @@
     ncdu
     ssh-to-age
     jq
+    zapret
+    _7zip-zstd-rar
+    xarchiver
+    thunar-archive-plugin
+    xfce4-pulseaudio-plugin
   ];
 
   # Desktop environment
@@ -104,6 +141,12 @@
     users = [ "ngan" ];
   };
 
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    extraCompatPackages = [ pkgs.proton-ge-bin ];
+  };
 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
@@ -173,4 +216,46 @@
   systemd.tmpfiles.rules = [
     "d /var/log/nixos-rebuild 0755 ngan users - -"
   ];
+
+  networking.networkmanager.dns = "systemd-resolved";
+
+  services.zapret2 = {
+    enable = true;
+
+    profiles = {
+      http = {
+        parameters = [
+          "--filter-tcp=80"
+          "--payload=http_req"
+          "--lua-desync=multidisorder:pos=1"
+        ];
+      };
+
+      https = {
+        parameters = [
+          "--filter-tcp=443"
+          "--payload=tls_client_hello"
+          "--lua-desync=multidisorder:pos=1"
+        ];
+      };
+
+      quic = {
+        parameters = [
+          "--filter-udp=443"
+          "--payload=quic_initial"
+          "--lua-desync=fake"
+        ];
+      };
+    };
+  };
+
+  services.resolved = {
+    enable = true;
+    settings.Resolve = {
+      DNS = [ "1.1.1.1#cloudflare-dns.com" "1.0.0.1#cloudflare-dns.com" ];
+      Domains = [ "~." ];
+      DNSOverTLS = "true";
+      DNSSEC = "allow-downgrade";
+    };
+  };
 }
