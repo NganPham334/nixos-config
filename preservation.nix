@@ -43,6 +43,9 @@
            ".local/share/Steam"
            ".steam"
 	   ".local/state/wireplumber"
+           "Games"
+           "repos"
+           "Storage"
          ];
       
          files = [
