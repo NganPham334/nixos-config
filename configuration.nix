@@ -96,7 +96,7 @@
   users.users."ngan" = {
     isNormalUser = true;
     description = "Tuong Ngan";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "i2c" ];
     hashedPasswordFile = config.sops.secrets.hashed_ngan.path;
   };
 
@@ -124,6 +124,7 @@
     xarchiver
     thunar-archive-plugin
     xfce4-pulseaudio-plugin
+    ddcutil
   ];
 
   # Desktop environment
@@ -163,6 +164,10 @@
   sops.secrets.hashed_ngan = {
     neededForUsers = true;
   };
+
+  sops.secrets.syncthing_cert.owner = "ngan";
+  sops.secrets.syncthing_key.owner = "ngan";
+  sops.secrets.central_syncthing_id.owner = "ngan";
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

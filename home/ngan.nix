@@ -1,5 +1,32 @@
-{ osConfig, pkgs, inputs, ... }:
+{ osConfig, config, lib, pkgs, inputs, ... }:
+let
+  syncthing = lib.getExe config.services.syncthing.package;
+  folderId = "6nhkt-m4tcn";
+  idFile = osConfig.sops.secrets.central_syncthing_id.path;
 
+  setupIntroducer = pkgs.writeShellScript "syncthing-introducer-setup" ''
+    set -eu
+    export PATH=${lib.makeBinPath [ pkgs.coreutils pkgs.gnugrep ]}:$PATH
+
+    ID="$(cat ${idFile})"
+
+    # wait for the Syncthing API to come up
+    for _ in $(seq 1 30); do
+      ${syncthing} cli show system >/dev/null 2>&1 && break
+      sleep 2
+    done
+
+    # add the introducer device if it isn't there yet
+    if ! ${syncthing} cli config devices list | grep -qx "$ID"; then
+      ${syncthing} cli config devices add --device-id "$ID" --name central --introducer
+    fi
+
+    # share the folder with it if it isn't already
+    if ! ${syncthing} cli config folders ${folderId} devices list | grep -qx "$ID"; then
+      ${syncthing} cli config folders ${folderId} devices add --device-id "$ID"
+    fi
+  '';
+in
 {
   imports = [ inputs.nixcord.homeModules.nixcord ];
 
@@ -56,6 +83,44 @@
 
   home.sessionVariables = {
     
+  };
+
+  services.syncthing = {
+    enable = true;
+    cert = osConfig.sops.secrets.syncthing_cert.path;
+    key = osConfig.sops.secrets.syncthing_key.path;
+
+    overrideFolders = true;
+    overrideDevices = false; # keep devices the introducer adds
+
+    settings = {
+      folders.${folderId} = {
+        id = folderId;
+        label = "Sink";
+        path = "/home/ngan/Storage/Sink";
+        devices = [ ]; # added by autostart after login
+      };
+
+      options = {
+        urAccepted = 3;
+        urSeen = 3;
+      };
+    };
+  };
+
+ systemd.user.services.syncthing-introducer-setup = {
+    Unit = {
+      Description = "Add Syncthing introducer";
+      Wants = [ "syncthing.service" ];
+      After = [ "syncthing.service" "syncthing-init.service" ];
+      PartOf = [ "syncthing.service" ];
+    };
+    Service = {
+      Type = "oneshot";
+      RemainAfterExit = true; # PartOf only restarts units that are active
+      ExecStart = "${setupIntroducer}";
+    };
+    Install.WantedBy = [ "default.target" ];
   };
 
   services.ssh-agent.enable = true;
