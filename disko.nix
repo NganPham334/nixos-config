@@ -45,16 +45,24 @@
 
       content = {
         type = "btrfs";
-        extraArgs = ["-f"];
+        extraArgs = [ "-f" ];
 
         subvolumes = {
           "/persistent" = {
-            mountOptions = ["compress=zstd" "subvol=persistent" "noatime"];
+            mountOptions = [
+              "compress=zstd"
+              "subvol=persistent"
+              "noatime"
+            ];
             mountpoint = "/persistent";
           };
 
           "/nix" = {
-            mountOptions = ["compress=zstd" "subvol=nix" "noatime"];
+            mountOptions = [
+              "compress=zstd"
+              "subvol=nix"
+              "noatime"
+            ];
             mountpoint = "/nix";
           };
         };

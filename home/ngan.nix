@@ -1,4 +1,11 @@
-{ osConfig, config, lib, pkgs, inputs, ... }:
+{
+  osConfig,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 let
   syncthing = lib.getExe config.services.syncthing.package;
   folderId = "6nhkt-m4tcn";
@@ -6,7 +13,12 @@ let
 
   setupIntroducer = pkgs.writeShellScript "syncthing-introducer-setup" ''
     set -eu
-    export PATH=${lib.makeBinPath [ pkgs.coreutils pkgs.gnugrep ]}:$PATH
+    export PATH=${
+      lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.gnugrep
+      ]
+    }:$PATH
 
     ID="$(cat ${idFile})"
 
@@ -26,6 +38,16 @@ let
       ${syncthing} cli config folders ${folderId} devices add --device-id "$ID"
     fi
   '';
+
+  opencode-wrapped = pkgs.writeShellScriptBin "opencode" ''
+    if ! XPROX_KEY="$(sudo cat "${osConfig.sops.secrets.xprox_key.path}")"; then
+      echo "Error: Failed to read xprox_key" >&2
+      exit 1
+    fi
+
+    export XPROX_KEY
+    exec ${pkgs.opencode}/bin/opencode "$@"
+  '';
 in
 {
   imports = [ inputs.nixcord.homeModules.nixcord ];
@@ -33,7 +55,6 @@ in
   home.packages = with pkgs; [
     nixd
     keepassxc
-    opencode
     fastfetch
     btop
     gcr_3
@@ -81,10 +102,6 @@ in
     };
   };
 
-  home.sessionVariables = {
-    
-  };
-
   services.syncthing = {
     enable = true;
     cert = osConfig.sops.secrets.syncthing_cert.path;
@@ -108,11 +125,14 @@ in
     };
   };
 
- systemd.user.services.syncthing-introducer-setup = {
+  systemd.user.services.syncthing-introducer-setup = {
     Unit = {
       Description = "Add Syncthing introducer";
       Wants = [ "syncthing.service" ];
-      After = [ "syncthing.service" "syncthing-init.service" ];
+      After = [
+        "syncthing.service"
+        "syncthing-init.service"
+      ];
       PartOf = [ "syncthing.service" ];
     };
     Service = {
@@ -124,7 +144,7 @@ in
   };
 
   services.ssh-agent.enable = true;
-  
+
   systemd.user.services.ssh-agent.Service.Environment = [
     "SSH_ASKPASS=${pkgs.gcr_3}/libexec/gcr-ssh-askpass"
     "SSH_ASKPASS_REQUIRE=force"
@@ -138,6 +158,84 @@ in
         identityFile = osConfig.sops.secrets.ngan_ssh_key.path;
         identitiesOnly = true;
         addKeysToAgent = "confirm";
+      };
+    };
+  };
+
+  programs.opencode = {
+    enable = true;
+    package = opencode-wrapped;
+
+    settings = {
+      model = "xprox/mimo-v2.6-pro";
+      default_agent = "plan";
+
+      agents = {
+        plan.model = "xprox/mimo-v2.6-pro";
+        build.model = "xprox/mimo-v2.6-pro";
+      };
+
+      providers.xprox = {
+        name = "xprox";
+        env = [ "XPROX_KEY" ];
+        package = "aisdk:@ai-sdk/openai-compatible";
+        settings = {
+          baseURL = "http://openai-proxy.ddns.net:8080";
+          apiKey = "{env:XPROX_KEY}";
+        };
+        models = {
+          "mimo-v2.6-pro" = {
+            name = "MiMo v2.6 Pro";
+            capabilities = {
+              tools = true;
+              input = [
+                "text"
+                "image"
+                "video"
+                "audio"
+              ];
+              output = [ "text" ];
+              reasoning = {
+                supported = true;
+                toggle = true;
+                effort = [
+                  "minimal"
+                  "high"
+                ];
+              };
+            };
+            limit = {
+              context = 1000000;
+              output = 128000;
+            };
+          };
+
+          "mimo-v2.6-flash" = {
+            name = "MiMo v2.6 Flash";
+            capabilities = {
+              tools = true;
+              input = [
+                "text"
+                "image"
+                "video"
+                "audio"
+              ];
+              output = [ "text" ];
+              reasoning = {
+                supported = true;
+                toggle = true;
+                effort = [
+                  "minimal"
+                  "high"
+                ];
+              };
+            };
+            limit = {
+              context = 1000000;
+              output = 128000;
+            };
+          };
+        };
       };
     };
   };

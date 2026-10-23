@@ -16,20 +16,27 @@
     fcitx5-lotus.url = "github:LotusInputMethod/fcitx5-lotus";
   };
 
-  outputs = { self, nixpkgs, home-manager, sops-nix,  ... }@inputs: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit inputs; };
+  outputs =
+    inputs:
+    let
       system = "x86_64-linux";
-      modules = [
-	./disko.nix
-	./preservation.nix
-        ./configuration.nix
-        home-manager.nixosModules.home-manager
-	sops-nix.nixosModules.sops
-	inputs.disko.nixosModules.disko
-	inputs.preservation.nixosModules.default
-	inputs.fcitx5-lotus.nixosModules.fcitx5-lotus
-      ];
+    in
+    {
+      nixosConfigurations.nixos = inputs.nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        inherit system;
+        modules = [
+          inputs.home-manager.nixosModules.home-manager
+          inputs.sops-nix.nixosModules.sops
+          inputs.disko.nixosModules.disko
+          inputs.preservation.nixosModules.default
+          inputs.fcitx5-lotus.nixosModules.fcitx5-lotus
+          ./disko.nix
+          ./preservation.nix
+          ./configuration.nix
+        ];
+      };
+
+      formatter.${system} = inputs.nixpkgs.legacyPackages.${system}.nixfmt;
     };
-  };
 }
