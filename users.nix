@@ -8,6 +8,7 @@
       "networkmanager"
       "wheel"
       "i2c"
+      "docker"
     ];
     hashedPasswordFile = config.sops.secrets.hashed_ngan.path;
   };

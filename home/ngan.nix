@@ -50,7 +50,10 @@ let
   '';
 in
 {
-  imports = [ inputs.nixcord.homeModules.nixcord ];
+  imports = [
+    inputs.nixcord.homeModules.nixcord
+    ./clion.nix
+  ];
 
   home.packages = with pkgs; [
     nixd
@@ -173,6 +176,13 @@ in
       agents = {
         plan.model = "xprox/mimo-v2.6-pro";
         build.model = "xprox/mimo-v2.6-pro";
+
+        general.model = "xprox/mimo-v2.6-flash";
+        explore.model = "xprox/mimo-v2.6-flash";
+        title.model = "xprox/mimo-v2.6-flash";
+
+        compaction.model = "xprox/mimo-v2.6-pro";
+        summary.model = "xprox/mimo-v2.6-pro";
       };
 
       providers.xprox = {

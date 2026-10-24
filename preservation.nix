@@ -8,6 +8,7 @@
       directories = [
         "/etc/nixos"
         "/var/lib/bluetooth"
+        "/var/lib/docker"
         "/var/lib/systemd/timers"
         "/var/log"
         "/etc/NetworkManager/system-connections"
@@ -58,6 +59,11 @@
           "Storage"
           ".local/share/opencode"
           ".local/state/opencode"
+          # JetBrains IDEs: settings/plugin settings/activation (version-agnostic parents)
+          ".config/JetBrains"
+          ".java"
+          # docker CLI: registry auth, buildx state
+          ".docker"
         ];
       };
     };
