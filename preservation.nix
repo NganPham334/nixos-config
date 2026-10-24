@@ -61,7 +61,7 @@
           ".local/state/opencode"
           # JetBrains IDEs: settings/plugin settings/activation (version-agnostic parents)
           ".config/JetBrains"
-          ".java"
+          ".java/.userPrefs"
           # docker CLI: registry auth, buildx state
           ".docker"
         ];
