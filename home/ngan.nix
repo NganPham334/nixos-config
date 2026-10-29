@@ -52,7 +52,7 @@ in
 {
   imports = [
     inputs.nixcord.homeModules.nixcord
-    ./clion.nix
+    ./vscode.nix
   ];
 
   home.packages = with pkgs; [
@@ -62,13 +62,73 @@ in
     btop
     gcr_3
     protontricks
+    bottles
   ];
 
   programs.nixcord = {
     enable = true;
     discord.enable = false;
 
-    vesktop = {
+    config.plugins =
+      lib.genAttrs [
+        "addAttachments"
+        "alwaysTrust"
+        "betterUploadButton"
+        "biggerStreamPreview"
+        "callTimer"
+        "clearUrls"
+        "copyFileContents"
+        "directFileDownload"
+        "disableCallIdle"
+        "fixCodeblockGap"
+        "fixImagesQuality"
+        "fixSpotifyEmbeds"
+        "fixYoutubeEmbeds"
+        "forceOwnerCrown"
+        "fullSearchContext"
+        "iLoveSpam"
+        "jumpToTop"
+        "mentionAvatars"
+        "messageLogger"
+        "noF1"
+        "noMiddleClickPaste"
+        "noReplyMention"
+        "noUnblockToJump"
+        "quickReply"
+        "reverseImageSearch"
+        "roleColorEverywhere"
+        "typingIndicator"
+        "typingTweaks"
+        "unsuppressEmbeds"
+        "validReply"
+        "voiceChatDoubleClick"
+        "voiceDownload"
+        "voiceMessages"
+        "webScreenShareFixes"
+        "youtubeAdblock"
+      ] (lib.const { enable = true; })
+      // {
+        fakeNitro = {
+          enable = true;
+          transformEmojis = false;
+          transformStickers = false;
+          useHyperLinks = false;
+        };
+        notificationVolume = {
+          enable = true;
+          notificationVolume = 70.0;
+        };
+        viewIcons = {
+          enable = true;
+          imgSize = "4096";
+        };
+        volumeBooster = {
+          enable = true;
+          multiplier = 5.0;
+        };
+      };
+
+    equibop = {
       enable = true;
 
       settings = {

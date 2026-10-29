@@ -10,7 +10,6 @@
   };
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.systemd.enable = true;
   # /etc/machine-id is preserved, so don't let systemd commit it at shutdown
   systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 

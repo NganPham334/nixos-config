@@ -47,7 +47,7 @@
           ".config/mozilla"
           ".mozilla"
           "nixos-config"
-          ".config/vesktop/sessionData"
+          ".config/equibop/sessionData"
           "Desktop"
           "Documents"
           ".config/fcitx5/conf"
@@ -59,9 +59,6 @@
           "Storage"
           ".local/share/opencode"
           ".local/state/opencode"
-          # JetBrains IDEs: settings/plugin settings/activation (version-agnostic parents)
-          ".config/JetBrains"
-          ".java/.userPrefs"
           # docker CLI: registry auth, buildx state
           ".docker"
         ];
