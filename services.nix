@@ -38,5 +38,6 @@
     thunar-archive-plugin
     xfce4-pulseaudio-plugin
     ddcutil
+    caligula
   ];
 }
