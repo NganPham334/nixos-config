@@ -54,6 +54,8 @@
           ".local/share/Steam"
           ".steam"
           ".local/state/wireplumber"
+          ".config/onlyoffice"
+          ".local/share/onlyoffice"
           "Games"
           "repos"
           "Storage"
