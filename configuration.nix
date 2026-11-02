@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -36,6 +41,7 @@
   # Desktop
   services.xserver.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
+  services.xserver.displayManager.startx.enable = true;
   services.xserver.exportConfiguration = true;
   services.xserver.xkb = {
     layout = "us";
@@ -45,7 +51,17 @@
   services.greetd = {
     enable = true;
     useTextGreeter = true;
-    settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd startxfce4";
+    settings.default_session = {
+      user = "greeter";
+      command = lib.concatStringsSep " " [
+        "${pkgs.tuigreet}/bin/tuigreet"
+        "--time"
+        "--remember"
+        "--remember-session"
+        "--xsessions ${config.services.displayManager.sessionData.desktops}/share/xsessions"
+        "--xsession-wrapper '${pkgs.xinit}/bin/startx ${config.services.displayManager.sessionData.wrapper}'"
+      ];
+    };
   };
 
   i18n.inputMethod = {

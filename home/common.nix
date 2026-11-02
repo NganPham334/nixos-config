@@ -30,6 +30,17 @@ in
 {
   programs.firefox.enable = true;
 
+  programs.ghostty = {
+    enable = true;
+    settings = {
+      gtk-single-instance = true;
+      quit-after-last-window-closed = false;
+    };
+  };
+
+  xdg.configFile."systemd/user/graphical-session.target.wants/app-com.mitchellh.ghostty.service".source =
+    "${pkgs.ghostty}/share/systemd/user/app-com.mitchellh.ghostty.service";
+
   xfconf.settings = {
 
     displays = {
@@ -99,11 +110,11 @@ in
 
   xdg.configFile."xfce4/panel/default.xml".source = panelDefault;
 
-  xdg.configFile."autostart/fcitx5-toggle-shortcut.desktop".text = ''
+  xdg.configFile."autostart/keyboard-shortcuts.desktop".text = ''
     [Desktop Entry]
     Type=Application
-    Name=fcitx5 toggle shortcut
-    Exec=sh -c "sleep 5 && xfconf-query -c xfce4-keyboard-shortcuts -n -t string -p '/commands/custom/<Primary>space' -s 'fcitx5-remote -t'"
+    Name=keyboard shortcuts
+    Exec=sh -c "sleep 5 && xfconf-query -c xfce4-keyboard-shortcuts -n -t string -p '/commands/custom/<Primary>space' -s 'fcitx5-remote -t' && xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary><Alt>t' -s 'ghostty +new-window'"
   '';
 
   home.stateVersion = "26.05";
