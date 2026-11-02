@@ -17,7 +17,9 @@
         twxs.cmake
       ];
       userSettings = {
+        "security.workspace.trust.enabled" = false;
         "workbench.startupEditor" = "none";
+        "workbench.welcomePage.experimentalOnboarding" = false;
         "workbench.welcomePage.walkthroughs.openOnInstall" = false;
       };
     };
