@@ -63,7 +63,6 @@ in
     gcr_3
     protontricks
     bottles
-    onlyoffice-desktopeditors
   ];
 
   programs.nixcord = {

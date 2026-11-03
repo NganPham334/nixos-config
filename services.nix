@@ -25,6 +25,24 @@
     extraCompatPackages = [ pkgs.proton-ge-bin ];
   };
 
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      corefonts
+      vista-fonts
+      liberation_ttf
+      carlito
+      caladea
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-color-emoji
+    ];
+  };
+
+  # extraFontPackages defaults to config.fonts.packages, so everything above
+  # is baked into the app's sandboxed /usr/share/fonts automatically.
+  programs.onlyoffice.enable = true;
+
   environment.systemPackages = with pkgs; [
     xinit
     sops
