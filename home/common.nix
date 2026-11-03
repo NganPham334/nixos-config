@@ -35,6 +35,8 @@ in
     settings = {
       gtk-single-instance = true;
       quit-after-last-window-closed = false;
+      window-padding-balance = true;
+      window-padding-color = "extend";
     };
   };
 
