@@ -66,6 +66,8 @@
           ".local/state/opencode"
           ".docker"
           ".cache/mesa_shader_cache" # without this ghostty is dog slow on first launch, even with the daemon
+          ".config/chromium"
+          ".cache/chromium"
         ];
       };
     };

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 let
   # stock layout minus panel-2 and its plugins (11-18)
   panelDefault =
@@ -29,6 +29,28 @@ let
 in
 {
   programs.firefox.enable = true;
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "firefox.desktop";
+      "application/xhtml+xml" = "firefox.desktop";
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "x-scheme-handler/about" = "firefox.desktop";
+      "x-scheme-handler/unknown" = "firefox.desktop";
+    };
+  };
+
+  xdg.configFile."xfce4/helpers.rc".text = ''
+    WebBrowser=firefox
+  '';
+
+  home.packages = [
+    (inputs.nixpkgs-mv2.legacyPackages.x86_64-linux.chromium.override {
+      commandLineArgs = "--disable-features=ExtensionManifestV2Disabled,ExtensionManifestV2Unsupported --enable-features=AllowLegacyMV2Extensions";
+    })
+  ];
 
   programs.ghostty = {
     enable = true;
@@ -76,6 +98,7 @@ in
     xfwm4 = {
       "general/wrap_windows" = false;
       "general/activate_action" = "switch";
+      "general/workspace_count" = 6;
     };
 
     # flat accel profile = no mouse acceleration (libinput takes [adaptive flat])

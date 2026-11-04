@@ -14,6 +14,7 @@
     preservation.url = "github:nix-community/preservation";
     nixcord.url = "github:4evy/nixcord";
     fcitx5-lotus.url = "github:LotusInputMethod/fcitx5-lotus";
+    nixpkgs-mv2.url = "github:NixOS/nixpkgs/b94af336c06215e59b48d1867940ac4d84b349b3";
   };
 
   outputs =
