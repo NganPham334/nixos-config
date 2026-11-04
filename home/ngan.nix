@@ -206,6 +206,21 @@ in
     Install.WantedBy = [ "default.target" ];
   };
 
+  services.devilspie2 = {
+    enable = true;
+    config = ''
+      local function is_chromium()
+        local app = (get_application_name() or ""):lower()
+        local class = (get_window_class() or ""):lower()
+        return app:find("chrom", 1, true) ~= nil or class:find("chrom", 1, true) ~= nil
+      end
+
+      if is_chromium() then
+        set_window_workspace(6)
+      end
+    '';
+  };
+
   services.ssh-agent.enable = true;
 
   systemd.user.services.ssh-agent.Service.Environment = [
