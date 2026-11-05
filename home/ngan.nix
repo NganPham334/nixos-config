@@ -63,6 +63,9 @@ in
     gcr_3
     protontricks
     bottles
+    redshift
+    texstudio
+    texlive.combined.scheme-full
   ];
 
   programs.nixcord = {
@@ -247,6 +250,7 @@ in
     settings = {
       model = "xprox/mimo-v2.6-pro";
       default_agent = "plan";
+      lsp = true;
 
       agents = {
         plan.model = "xprox/mimo-v2.6-pro";
